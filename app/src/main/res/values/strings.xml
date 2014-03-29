@@ -1,0 +1,15 @@
+<resources>
+
+    <string name="app_name">secureit</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="password_hint">secret&#8230;</string>
+    <string name="data_hint">data&#8230;</string>
+    <string name="file_name_hint">file name&#8230;</string>
+    <string name="plain_text_button">Plain text</string>
+    <string name="file_encrypt_button">File encrypt</string>
+    <string name="file_decrypt_button">File decrypt</string>
+    <string name="nfc_write_button">Write to TAG</string>
+
+</resources>

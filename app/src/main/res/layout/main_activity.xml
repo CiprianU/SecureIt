@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <Button
+        android:id="@+id/plainTextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:padding="10dip"
+        android:text="@string/plain_text_button" />
+
+    <Button
+        android:id="@+id/fileEncryptButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:padding="10dip"
+        android:text="@string/file_encrypt_button" />
+
+    <Button
+        android:id="@+id/fileDecryptButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:padding="10dip"
+        android:text="@string/file_decrypt_button" />
+
+    <Button
+        android:id="@+id/nfcWriteButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:padding="10dip"
+        android:text="@string/nfc_write_button" />
+
+</LinearLayout>
