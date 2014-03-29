@@ -76,7 +76,7 @@ public class Encryption {
      * @return the base 64 encrypted string.
      */
     public static String encrypt3DES(String plainText, String pass) {
-        Cipher m_cypher = null;
+        Cipher m_cypher;
         String ret = null;
 
         byte[] tmpSecret = (pass != null && pass.length() > 0) ? hmac_sha1(
@@ -126,7 +126,7 @@ public class Encryption {
 
     public static String decrypt3DES(String encryptedText, String pass) {
         String decryptedText = null;
-        Cipher m_cypher = null;
+        Cipher m_cypher;
 
         byte[] tmpSecret = (pass != null && pass.length() > 0) ? hmac_sha1(
                 decodeHex(Constants.ALGORITHM_SHA1_KEY.toCharArray()),
