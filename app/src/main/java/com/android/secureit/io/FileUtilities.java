@@ -1,5 +1,7 @@
 package com.android.secureit.io;
 
+import android.os.Environment;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,8 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import android.os.Environment;
 
 public class FileUtilities {
     public static final String defaultFilePath = Environment
