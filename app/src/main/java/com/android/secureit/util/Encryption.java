@@ -22,6 +22,8 @@ import javax.crypto.spec.SecretKeySpec;
  * @author cur
  */
 public class Encryption {
+    final static private char[] hexArray = "0123456789abcdef".toCharArray();
+
     private static final byte[] decodeHex(final char[] data) {
         assert null != data : "Data parameter must not be null";
 
@@ -44,15 +46,32 @@ public class Encryption {
     }
 
     /**
+     * Converts from byte array to hex String
+     *
+     * @param bytes
+     * @return hex String
+     */
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+
+        return new String(hexChars);
+    }
+
+    /**
      * Apply the SHA1 algorithm.
      *
      * @param keyBytes
      * @param text
      * @return the encrypted byte array.
      */
-    public static final byte[] hmac_sha1(byte[] keyBytes, byte[] text) {
+    public static final byte[] hmacSha1(byte[] keyBytes, byte[] text) {
         Mac hmacSha1;
-        byte[] temp_return = null;
+        byte[] ret = null;
         try {
             try {
                 hmacSha1 = Mac.getInstance("HmacSHA1");
@@ -62,11 +81,11 @@ public class Encryption {
 
             final SecretKeySpec macKey = new SecretKeySpec(keyBytes, "RAW");
             hmacSha1.init(macKey);
-            temp_return = hmacSha1.doFinal(text);
+            ret = hmacSha1.doFinal(text);
         } catch (Exception e) {
 
         }
-        return temp_return;
+        return ret;
     }
 
     /**
@@ -79,7 +98,7 @@ public class Encryption {
         Cipher m_cypher;
         String ret = null;
 
-        byte[] tmpSecret = (pass != null && pass.length() > 0) ? hmac_sha1(
+        byte[] tmpSecret = (pass != null && pass.length() > 0) ? hmacSha1(
                 decodeHex(Constants.ALGORITHM_SHA1_KEY.toCharArray()),
                 pass.getBytes()) : decodeHex(Constants.ALGORITHM_3DES_KEY
                 .toCharArray());
@@ -128,7 +147,7 @@ public class Encryption {
         String decryptedText = null;
         Cipher m_cypher;
 
-        byte[] tmpSecret = (pass != null && pass.length() > 0) ? hmac_sha1(
+        byte[] tmpSecret = (pass != null && pass.length() > 0) ? hmacSha1(
                 decodeHex(Constants.ALGORITHM_SHA1_KEY.toCharArray()),
                 pass.getBytes()) : decodeHex(Constants.ALGORITHM_3DES_KEY
                 .toCharArray());
