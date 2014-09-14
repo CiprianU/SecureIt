@@ -24,7 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class Encryption {
     final static private char[] hexArray = "0123456789abcdef".toCharArray();
 
-    private static final byte[] decodeHex(final char[] data) {
+    private static byte[] decodeHex(final char[] data) {
         assert null != data : "Data parameter must not be null";
 
         int len = data.length;
@@ -69,7 +69,7 @@ public class Encryption {
      * @param text
      * @return the encrypted byte array.
      */
-    public static final byte[] hmacSha1(byte[] keyBytes, byte[] text) {
+    public static byte[] hmacSha1(byte[] keyBytes, byte[] text) {
         Mac hmacSha1;
         byte[] ret = null;
         try {
@@ -83,7 +83,7 @@ public class Encryption {
             hmacSha1.init(macKey);
             ret = hmacSha1.doFinal(text);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return ret;
     }
