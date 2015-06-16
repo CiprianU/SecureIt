@@ -41,7 +41,9 @@ public class FileEncryptDecryptActivity extends Activity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.file_decrypt_activity);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         // Init the toast.
         infoToast = Toast.makeText(getApplicationContext(), "",

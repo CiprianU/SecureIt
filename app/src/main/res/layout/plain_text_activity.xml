@@ -1,77 +1,85 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:padding="5dp">
-
-    <EditText
-        android:id="@+id/plainTextEditText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/data_hint"
-        android:inputType="textMultiLine" />
-
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/password_hint"
-        android:inputType="textPassword" />
-
-    <EditText
-        android:id="@+id/fileNameEditText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/file_name_hint"
-        android:inputType="text" />
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="5dp">
 
-        <Button
-            android:id="@+id/encryptButton"
+        <EditText
+            android:id="@+id/plainTextEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/data_hint"
+            android:inputType="textMultiLine" />
+
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/fileNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/file_name_hint"
+            android:inputType="text" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Encrypt" />
+            android:orientation="horizontal"
+            tools:ignore="HardcodedText">
 
-        <Button
-            android:id="@+id/decryptButton"
+            <Button
+                android:id="@+id/encryptButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Encrypt" />
+
+            <Button
+                android:id="@+id/decryptButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Decrypt" />
+
+            <Button
+                android:id="@+id/storeToFileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save" />
+
+            <Button
+                android:id="@+id/readFileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reload" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Decrypt" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/storeToFileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save" />
+            <TextView
+                android:id="@+id/edTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/readFileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reload" />
+            <TextView
+                android:id="@+id/encryptedDecryptedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp" />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/edTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/encryptedDecryptedTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp" />
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
