@@ -1,9 +1,4 @@
-/**
- *
- */
 package com.android.secureit.util;
-
-import org.apache.http.protocol.HTTP;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -18,9 +13,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-/**
- * @author cur
- */
 public class Encryption {
     final static private char[] hexArray = "0123456789abcdef".toCharArray();
 
@@ -36,7 +28,7 @@ public class Encryption {
         final byte[] out = new byte[len >> 1];
 
         // 2 characters form the hex value.
-        for (int idx = 0, jdx = 0, fdx = 0; jdx < len; ++idx) {
+        for (int idx = 0, jdx = 0, fdx; jdx < len; ++idx) {
             fdx = (Character.digit(data[jdx++], 16) << 4)
                     | (Character.digit(data[jdx++], 16));
             out[idx] = (byte) (fdx & 0xFF);
@@ -105,9 +97,7 @@ public class Encryption {
 
         byte[] secret = new byte[16];
         if (tmpSecret.length > 16) {
-            for (int i = 0; i < 16; i++) {
-                secret[i] = tmpSecret[i];
-            }
+            System.arraycopy(tmpSecret, 0, secret, 0, 16);
         } else {
             secret = tmpSecret;
         }
@@ -122,22 +112,12 @@ public class Encryption {
             m_cypher.init(Cipher.ENCRYPT_MODE, key, iv);
 
             ret = Base64
-                    .encode(m_cypher.doFinal(plainText.getBytes(HTTP.UTF_8)));
+                    .encode(m_cypher.doFinal(plainText.getBytes("UTF-8")));
 
-        } catch (NoSuchAlgorithmException e1) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException
+                | InvalidKeyException | UnsupportedEncodingException
+                | InvalidAlgorithmParameterException | BadPaddingException e1) {
             e1.printStackTrace();
-        } catch (NoSuchPaddingException e1) {
-            e1.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
         }
 
         return ret;
@@ -154,9 +134,7 @@ public class Encryption {
 
         byte[] secret = new byte[16];
         if (tmpSecret.length > 16) {
-            for (int i = 0; i < 16; i++) {
-                secret[i] = tmpSecret[i];
-            }
+            System.arraycopy(tmpSecret, 0, secret, 0, 16);
         } else {
             secret = tmpSecret;
         }
@@ -173,20 +151,10 @@ public class Encryption {
             m_cypher.init(Cipher.DECRYPT_MODE, key, iv);
 
             decryptedText = new String(m_cypher.doFinal(encodedBytes));
-        } catch (NoSuchAlgorithmException e1) {
+        } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException
+                | BadPaddingException | InvalidAlgorithmParameterException
+                | IllegalArgumentException | IllegalBlockSizeException e1) {
             e1.printStackTrace();
-        } catch (NoSuchPaddingException e1) {
-            e1.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
         }
 
         return decryptedText;

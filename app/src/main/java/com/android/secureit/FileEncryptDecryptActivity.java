@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.android.secureit;
 
 import android.app.Activity;
@@ -19,9 +16,6 @@ import com.android.secureit.util.Encryption;
 
 import java.io.File;
 
-/**
- * @author ciprian.ursu
- */
 public class FileEncryptDecryptActivity extends Activity implements
         OnClickListener {
     private TextView titleTextView;
