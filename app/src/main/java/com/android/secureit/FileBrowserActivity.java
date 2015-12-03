@@ -17,11 +17,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class FileBrowserActivity extends ListActivity {
-    private List<String> directoryEntries = new ArrayList<String>();
+    private List<String> directoryEntries = new ArrayList<>();
     private File currentDirectory = new File(Environment
             .getExternalStorageDirectory().getAbsolutePath());
-
-    private ListView listView;
 
     /**
      * Called when the activity is first created.
@@ -42,17 +40,15 @@ public class FileBrowserActivity extends ListActivity {
         // so we do not need it here.
         browseToRoot();
 
-        listView = getListView();
-        listView.setTextFilterEnabled(true);
+//        ListView listView = getListView();
+//        listView.setTextFilterEnabled(true);
     }
 
     @Override
     public void onBackPressed() {
-        // if we're not in the sdcard root, back button will go back to current
-        // dir's parent.
+        // if we're not in the sdcard root, back button will go back to current dir's parent.
         if (this.currentDirectory.getName().contentEquals(
-                (CharSequence) Environment.getExternalStorageDirectory()
-                        .getName()
+                Environment.getExternalStorageDirectory().getName()
         ))
             super.onBackPressed();
         else
@@ -121,10 +117,10 @@ public class FileBrowserActivity extends ListActivity {
                 return lhs.compareToIgnoreCase(rhs);
             }
         });
-        this.directoryEntries.addAll(new ArrayList<String>(Arrays
+        this.directoryEntries.addAll(new ArrayList<>(Arrays
                 .asList(fileList)));
 
-        ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> directoryList = new ArrayAdapter<>(this,
                 R.layout.file_row, this.directoryEntries);
 
         this.setListAdapter(directoryList);
@@ -136,27 +132,23 @@ public class FileBrowserActivity extends ListActivity {
         if (selectedFileString.equals("/..")) {
             this.upOneLevel();
         } else {
-            File clickedFile = null;
-
-            clickedFile = new File(
+            File clickedFile = new File(
                     this.currentDirectory.getAbsolutePath()
                             + ((!this.directoryEntries.get((int) id)
                             .startsWith("/")) ? "/" : "")
                             + this.directoryEntries.get((int) id)
             );
 
-            if (clickedFile != null) {
-                if (clickedFile.isDirectory()) {
-                    this.browseTo(clickedFile);
-                } else {
-                    // a file has been selected
-                    Intent intent = this.getIntent();
-                    intent.putExtra(Constants.FILE_SELECTED,
-                            clickedFile.getAbsolutePath());
+            if (clickedFile.isDirectory()) {
+                this.browseTo(clickedFile);
+            } else {
+                // a file has been selected
+                Intent intent = this.getIntent();
+                intent.putExtra(Constants.FILE_SELECTED,
+                        clickedFile.getAbsolutePath());
 
-                    this.setResult(RESULT_OK, intent);
-                    exitActivity();
-                }
+                this.setResult(RESULT_OK, intent);
+                exitActivity();
             }
         }
     }

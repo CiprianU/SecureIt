@@ -22,15 +22,13 @@ public class FileUtilities {
 
     public static String readFile(String absPath) {
         try {
-            String str = "";
-            StringBuffer buf = new StringBuffer();
+            String str;
+            StringBuilder buf = new StringBuilder();
             File file = new File(absPath);
             InputStream is = new FileInputStream(file);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            if (is != null) {
-                while ((str = reader.readLine()) != null) {
-                    buf.append(str + "\n");
-                }
+            while ((str = reader.readLine()) != null) {
+                buf.append(str).append("\n");
             }
             is.close();
 
@@ -41,6 +39,7 @@ public class FileUtilities {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void writeToFile(String information, String filePath) {
         File file = new File(filePath);
 
@@ -58,7 +57,9 @@ public class FileUtilities {
         }
 
         try {
-            writeStream.close();
+            if (writeStream != null) {
+                writeStream.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

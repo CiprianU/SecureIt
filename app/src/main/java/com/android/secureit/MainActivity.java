@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 
 import com.android.secureit.util.Constants;
 
+@SuppressWarnings("ConstantConditions")
 public class MainActivity extends Activity implements OnClickListener {
 
     @Override
@@ -18,7 +19,6 @@ public class MainActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        // TODO: use navigation drawer
         getActionBar().setDisplayHomeAsUpEnabled(false);
 
         findViewById(R.id.plainTextButton).setOnClickListener(this);

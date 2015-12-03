@@ -1,5 +1,6 @@
 package com.android.secureit;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,36 +12,33 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.secureit.io.FileUtilities;
 import com.android.secureit.util.Encryption;
 
 public class PlainTextActivity extends Activity implements OnClickListener {
+    String password;
     private EditText pass;
     private EditText toEncryptEditText;
-    private Button encryptButton;
-    private Button decryptButton;
-    private Button saveButton;
-    private Button reloadButton;
     private TextView enDeTextView;
     private TextView enDeTitleTextView;
     private EditText fileNameEditText;
-
-    String password;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plain_text_activity);
+        //noinspection ConstantConditions
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         pass = (EditText) findViewById(R.id.passwordEditText);
         toEncryptEditText = (EditText) findViewById(R.id.plainTextEditText);
         fileNameEditText = (EditText) findViewById(R.id.fileNameEditText);
-        encryptButton = (Button) findViewById(R.id.encryptButton);
-        decryptButton = (Button) findViewById(R.id.decryptButton);
-        saveButton = (Button) findViewById(R.id.storeToFileButton);
-        reloadButton = (Button) findViewById(R.id.readFileButton);
+        Button encryptButton = (Button) findViewById(R.id.encryptButton);
+        Button decryptButton = (Button) findViewById(R.id.decryptButton);
+        Button saveButton = (Button) findViewById(R.id.storeToFileButton);
+        Button reloadButton = (Button) findViewById(R.id.readFileButton);
         enDeTextView = (TextView) findViewById(R.id.encryptedDecryptedTextView);
         enDeTitleTextView = (TextView) findViewById(R.id.edTitleTextView);
 
@@ -66,6 +64,7 @@ public class PlainTextActivity extends Activity implements OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View v) {
         String encryptedText;
@@ -90,6 +89,9 @@ public class PlainTextActivity extends Activity implements OnClickListener {
                 String fileName = fileNameEditText.getText().toString();
                 FileUtilities.writeToFile(enDeTextView.getText().toString(),
                         FileUtilities.defaultFilePath + fileName + ".sit");
+                Toast.makeText(this,
+                        "Done! You'll find it here: " + FileUtilities.defaultFilePath + fileName + ".sit",
+                        Toast.LENGTH_LONG).show();
                 break;
 
             case R.id.readFileButton:
