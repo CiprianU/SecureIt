@@ -3,6 +3,7 @@ package com.android.secureit;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -56,7 +57,7 @@ public class FileEncryptDecryptActivity extends Activity implements
         titleTextView = (TextView) findViewById(R.id.fileDecryptTitleTextView);
         passwordEditText = (EditText) findViewById(R.id.fileDecryptPasswordEditText);
         contentTextView = (TextView) findViewById(R.id.fileDecryptContentTextView);
-        encryptDecryptButton = (Button) findViewById(R.id.fileDecryptButton);
+        encryptDecryptButton = (Button) findViewById(R.id.fileEncryptDecryptButton);
 
         if (activityMode == Constants.FILE_DECRYPT) {
             encryptDecryptButton.setText("Decrypt");
@@ -98,58 +99,71 @@ public class FileEncryptDecryptActivity extends Activity implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fileDecryptButton:
-                String password = passwordEditText.getText().toString();
-                if (password.length() == 0) {
-                    infoToast.setText("Empty password!");
-                    infoToast.show();
-                    break;
-                }
-                if (activityMode == Constants.FILE_DECRYPT) {
-                    String decryptedText = Encryption.decrypt3DES(fileContent,
-                            password);
-                    contentTextView.setText(decryptedText);
-                    if (decryptedText == null || decryptedText.length() == 0) {
-                        infoToast
-                                .setText("Oups! There was a problem while trying to decrypt the file");
-                        infoToast.show();
-                    }
-                } else {
-                    String encryptedText = Encryption.encrypt3DES(fileContent,
-                            password);
-                    contentTextView.setText(encryptedText);
-                    if (encryptedText == null || encryptedText.length() == 0) {
-                        infoToast
-                                .setText("Oups! There was a problem while trying to encrypt the file");
-                        infoToast.show();
-                    } else {
-                        storeContentButton.setVisibility(View.VISIBLE);
-                    }
-                }
-                encryptDecryptButton.setVisibility(View.GONE);
+            case R.id.fileEncryptDecryptButton:
+                onFileEncryptDecryptClicked();
                 break;
 
             case R.id.storeToFileButton:
                 // store the encrypted file on sd card
-                int separatorPos = selectedFilePath.lastIndexOf(File.separatorChar);
-                if (separatorPos > 0) {
-                    String fileName = selectedFilePath.substring(separatorPos + 1);
-                    String filePath = FileUtilities.defaultFilePath;
-                    int pos = fileName.lastIndexOf('.');
-                    if (pos > 0) {
-                        filePath += fileName.substring(0, pos) + ".sit";
-                    } else {
-                        filePath += fileName + ".sit";
-                    }
-                    FileUtilities.writeToFile(contentTextView.getText().toString(),
-                            filePath);
-                    infoToast.setText("Successfully stored at " + filePath);
-                    infoToast.show();
-                } else {
-                    infoToast.setText("Oups! file NOT stored");
-                    infoToast.show();
-                }
+                onStoreFileClicked();
                 break;
+        }
+    }
+
+    private void onStoreFileClicked() {
+        int separatorPos = selectedFilePath.lastIndexOf(File.separatorChar);
+        if (separatorPos > 0) {
+            final String fileName = selectedFilePath.substring(separatorPos + 1);
+            final int pos = fileName.lastIndexOf('.');
+            String filePath = FileUtilities.defaultFilePath;
+            if (pos > 0) {
+                filePath += fileName.substring(0, pos) + ".sit";
+            } else {
+                filePath += fileName + ".sit";
+            }
+            FileUtilities.writeToFile(contentTextView.getText().toString(), filePath);
+            infoToast.setText("Successfully stored at " + filePath);
+            infoToast.show();
+        } else {
+            infoToast.setText("Oups! file NOT stored");
+            infoToast.show();
+        }
+    }
+
+    private void onFileEncryptDecryptClicked() {
+        final String password = passwordEditText.getText().toString();
+        if (TextUtils.isEmpty(password)) {
+            infoToast.setText("Empty password!");
+            infoToast.show();
+            return;
+        }
+
+        if (activityMode == Constants.FILE_DECRYPT) {
+            decryptFileContent(password);
+        } else {
+            encryptFileContent(password);
+        }
+
+        encryptDecryptButton.setVisibility(View.GONE);
+    }
+
+    private void encryptFileContent(String password) {
+        final String encryptedText = Encryption.encryptAES(fileContent, password);
+        contentTextView.setText(encryptedText);
+        if (TextUtils.isEmpty(encryptedText)) {
+            infoToast.setText("Oups! There was a problem while trying to encrypt the file");
+            infoToast.show();
+        } else {
+            storeContentButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void decryptFileContent(String password) {
+        final String decryptedText = Encryption.decryptAES(fileContent, password);
+        contentTextView.setText(decryptedText);
+        if (TextUtils.isEmpty(decryptedText)) {
+            infoToast.setText("Oups! There was a problem while trying to decrypt the file");
+            infoToast.show();
         }
     }
 }

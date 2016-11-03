@@ -1,14 +1,11 @@
 package com.android.secureit.util;
 
 public class Constants {
-    public static final String ALGORITHM_3DES_KEY = "3E4A2241531449444827384777273233390682150734084D";
     // TODO: this should come from NFC
-    public static final String ALGORITHM_SHA1_KEY = "Secure-it!";
-    public static final String ALGORITHM_ID = "002";
+    public static final String SHA256_KEY = "BL2P#QdB6UZftaXuV4GrT#azKZDI1$pi";
 
-    public static final String ENCRYPTION_KEY_TYPE = "DESede";
-    public static final String ENCRYPTION_ALGORITHM = "DESede/CBC/PKCS5Padding";
-    public static final String ENCRYPTION_KEY_ID = "001";
+    public static final String ENCRYPTION_KEY_TYPE = "AES";
+    public static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
 
     public static final String FILE_SELECTED = "selected_file";
 

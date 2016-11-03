@@ -1,6 +1,5 @@
 package com.android.secureit;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,8 +16,7 @@ import com.android.secureit.io.FileUtilities;
 import com.android.secureit.util.Encryption;
 
 public class PlainTextActivity extends Activity implements OnClickListener {
-    String password;
-    private EditText pass;
+    private EditText passwordEditText;
     private EditText toEncryptEditText;
     private TextView enDeTextView;
     private TextView enDeTitleTextView;
@@ -29,23 +26,18 @@ public class PlainTextActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plain_text_activity);
-        //noinspection ConstantConditions
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        pass = (EditText) findViewById(R.id.passwordEditText);
+        passwordEditText = (EditText) findViewById(R.id.passwordEditText);
         toEncryptEditText = (EditText) findViewById(R.id.plainTextEditText);
         fileNameEditText = (EditText) findViewById(R.id.fileNameEditText);
-        Button encryptButton = (Button) findViewById(R.id.encryptButton);
-        Button decryptButton = (Button) findViewById(R.id.decryptButton);
-        Button saveButton = (Button) findViewById(R.id.storeToFileButton);
-        Button reloadButton = (Button) findViewById(R.id.readFileButton);
         enDeTextView = (TextView) findViewById(R.id.encryptedDecryptedTextView);
         enDeTitleTextView = (TextView) findViewById(R.id.edTitleTextView);
 
-        encryptButton.setOnClickListener(this);
-        decryptButton.setOnClickListener(this);
-        saveButton.setOnClickListener(this);
-        reloadButton.setOnClickListener(this);
+        findViewById(R.id.encryptButton).setOnClickListener(this);
+        findViewById(R.id.decryptButton).setOnClickListener(this);
+        findViewById(R.id.storeToFileButton).setOnClickListener(this);
+        findViewById(R.id.readFileButton).setOnClickListener(this);
     }
 
     @Override
@@ -61,49 +53,62 @@ public class PlainTextActivity extends Activity implements OnClickListener {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View v) {
-        String encryptedText;
         switch (v.getId()) {
             case R.id.encryptButton:
-                password = pass.getText().toString();
-                encryptedText = Encryption.encrypt3DES(
-                        toEncryptEditText.getText().toString(), password);
-                enDeTextView.setText(encryptedText);
-                enDeTitleTextView.setText("Encrypted:");
+                encryptPlainText();
                 break;
 
             case R.id.decryptButton:
-                password = pass.getText().toString();
-                encryptedText = enDeTextView.getText().toString();
-                String decryptedText = Encryption.decrypt3DES(encryptedText, password);
-                enDeTextView.setText(decryptedText);
-                enDeTitleTextView.setText("Decrypted:");
+                decrypt();
                 break;
 
             case R.id.storeToFileButton:
-                String fileName = fileNameEditText.getText().toString();
-                FileUtilities.writeToFile(enDeTextView.getText().toString(),
-                        FileUtilities.defaultFilePath + fileName + ".sit");
-                Toast.makeText(this,
-                        "Done! You'll find it here: " + FileUtilities.defaultFilePath + fileName + ".sit",
-                        Toast.LENGTH_LONG).show();
+                storeToFile();
                 break;
 
             case R.id.readFileButton:
-            /*fileName = fileNameEditText.getText().toString();
-            String fileContent = FileUtilities.readFile(FileUtilities.defaultFilePath
-                    + fileName + ".sit");
-            enDeTextView.setText(fileContent);
-            enDeTitleTextView.setText(fileName + ".sit:");*/
-                Intent intent = new Intent(this, FileBrowserActivity.class);
-                this.startActivity(intent);
+                readFile();
             default:
                 break;
         }
+    }
+
+    private void readFile() {
+        final Intent intent = new Intent(this, FileBrowserActivity.class);
+        startActivity(intent);
+    }
+
+    private void storeToFile() {
+        final String fileName = fileNameEditText.getText().toString();
+        FileUtilities.writeToFile(enDeTextView.getText().toString(),
+                FileUtilities.defaultFilePath + fileName + ".sit");
+
+        Toast.makeText(this,
+                "Done! You'll find it here: " + FileUtilities.defaultFilePath + fileName + ".sit",
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void decrypt() {
+        final String encryptedText = enDeTextView.getText().toString();
+        final String key = passwordEditText.getText().toString();
+        final String decryptedText = Encryption.decryptAES(encryptedText, key);
+
+        enDeTextView.setText(decryptedText);
+        enDeTitleTextView.setText("Decrypted:");
+    }
+
+    private void encryptPlainText() {
+        final String textToEncrypt = toEncryptEditText.getText().toString();
+        final String key = passwordEditText.getText().toString();
+
+        final String encryptedText = Encryption.encryptAES(textToEncrypt, key);
+        enDeTextView.setText(encryptedText);
+        enDeTitleTextView.setText("Encrypted:");
     }
 }
