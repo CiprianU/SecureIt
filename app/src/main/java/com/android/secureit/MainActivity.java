@@ -1,8 +1,10 @@
 package com.android.secureit;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,8 +13,12 @@ import android.view.View.OnClickListener;
 
 import com.android.secureit.util.Constants;
 
-@SuppressWarnings("ConstantConditions")
-public class MainActivity extends Activity implements OnClickListener {
+import java.util.List;
+
+import pub.devrel.easypermissions.EasyPermissions;
+
+public class MainActivity extends Activity implements
+        OnClickListener, EasyPermissions.PermissionCallbacks {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,10 @@ public class MainActivity extends Activity implements OnClickListener {
         findViewById(R.id.fileEncryptButton).setOnClickListener(this);
         findViewById(R.id.fileDecryptButton).setOnClickListener(this);
         findViewById(R.id.nfcWriteButton).setOnClickListener(this);
+
+        EasyPermissions.requestPermissions(this, "just accept", 1,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     @Override
@@ -70,5 +80,23 @@ public class MainActivity extends Activity implements OnClickListener {
 
         if (intent != null)
             this.startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> list) {
+        finish();
     }
 }

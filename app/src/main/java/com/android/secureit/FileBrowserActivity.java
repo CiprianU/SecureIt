@@ -83,11 +83,11 @@ public class FileBrowserActivity extends ListActivity {
         this.directoryEntries.clear();
 
         // Add the ".." == 'Up one level'
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(10);
+//        } catch (InterruptedException e1) {
+//            e1.printStackTrace();
+//        }
 
         if (this.currentDirectory.getParent() != null
                 && !this.currentDirectory.getName().equalsIgnoreCase(
@@ -98,17 +98,16 @@ public class FileBrowserActivity extends ListActivity {
 
         // On relative Mode, we have to add the current-path to
         // the beginning
-        int currentPathStringLenght = this.currentDirectory.getAbsolutePath()
-                .length();
+        int currentPathStringLength = this.currentDirectory.getAbsolutePath().length();
         String[] fileList = new String[files.length];
 
         for (int i = 0; i < fileList.length; i++) {
             if (files[i].isDirectory())
                 fileList[i] = files[i].getAbsolutePath().substring(
-                        currentPathStringLenght);
+                        currentPathStringLength);
             else
                 fileList[i] = files[i].getAbsolutePath().substring(
-                        currentPathStringLenght + 1);
+                        currentPathStringLength + 1);
         }
 
         // Arrays.sort(fileList);

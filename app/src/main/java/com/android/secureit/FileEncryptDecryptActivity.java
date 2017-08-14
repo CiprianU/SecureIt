@@ -17,8 +17,8 @@ import com.android.secureit.util.Encryption;
 
 import java.io.File;
 
-public class FileEncryptDecryptActivity extends Activity implements
-        OnClickListener {
+public class FileEncryptDecryptActivity extends Activity implements OnClickListener {
+
     private TextView titleTextView;
     private EditText passwordEditText;
     private TextView contentTextView;
@@ -54,16 +54,16 @@ public class FileEncryptDecryptActivity extends Activity implements
             this.finish();
         }
 
-        titleTextView = (TextView) findViewById(R.id.fileDecryptTitleTextView);
-        passwordEditText = (EditText) findViewById(R.id.fileDecryptPasswordEditText);
-        contentTextView = (TextView) findViewById(R.id.fileDecryptContentTextView);
-        encryptDecryptButton = (Button) findViewById(R.id.fileEncryptDecryptButton);
+        titleTextView = findViewById(R.id.fileDecryptTitleTextView);
+        passwordEditText = findViewById(R.id.fileDecryptPasswordEditText);
+        contentTextView = findViewById(R.id.fileDecryptContentTextView);
+        encryptDecryptButton = findViewById(R.id.fileEncryptDecryptButton);
 
         if (activityMode == Constants.FILE_DECRYPT) {
             encryptDecryptButton.setText("Decrypt");
         } else {
             encryptDecryptButton.setText("Encrypt");
-            storeContentButton = (Button) findViewById(R.id.storeToFileButton);
+            storeContentButton = findViewById(R.id.storeToFileButton);
             storeContentButton.setText("Store");
             storeContentButton.setOnClickListener(this);
         }
@@ -82,15 +82,16 @@ public class FileEncryptDecryptActivity extends Activity implements
                 if (resultCode == RESULT_OK) {
                     selectedFilePath = data.getStringExtra(Constants.FILE_SELECTED);
 
-                    if (selectedFilePath == null || selectedFilePath.length() == 0)
-                        this.finish();
+                    if (selectedFilePath == null || selectedFilePath.length() == 0) {
+                        finish();
+                    }
 
                     titleTextView.setText(selectedFilePath);
 
                     fileContent = FileUtilities.readFile(selectedFilePath);
                     contentTextView.setText(fileContent);
                 } else {
-                    this.finish();
+                    finish();
                 }
                 break;
         }

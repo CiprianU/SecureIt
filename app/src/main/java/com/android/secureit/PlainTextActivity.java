@@ -28,11 +28,11 @@ public class PlainTextActivity extends Activity implements OnClickListener {
         setContentView(R.layout.plain_text_activity);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        passwordEditText = (EditText) findViewById(R.id.passwordEditText);
-        toEncryptEditText = (EditText) findViewById(R.id.plainTextEditText);
-        fileNameEditText = (EditText) findViewById(R.id.fileNameEditText);
-        enDeTextView = (TextView) findViewById(R.id.encryptedDecryptedTextView);
-        enDeTitleTextView = (TextView) findViewById(R.id.edTitleTextView);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        toEncryptEditText = findViewById(R.id.plainTextEditText);
+        fileNameEditText = findViewById(R.id.fileNameEditText);
+        enDeTextView = findViewById(R.id.encryptedDecryptedTextView);
+        enDeTitleTextView = findViewById(R.id.edTitleTextView);
 
         findViewById(R.id.encryptButton).setOnClickListener(this);
         findViewById(R.id.decryptButton).setOnClickListener(this);
