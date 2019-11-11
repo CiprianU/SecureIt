@@ -18,8 +18,9 @@ import java.util.List;
 
 public class FileBrowserActivity extends ListActivity {
     private List<String> directoryEntries = new ArrayList<>();
-    private File currentDirectory = new File(Environment
-            .getExternalStorageDirectory().getAbsolutePath());
+    private File currentDirectory = new File(
+            Environment.getExternalStorageDirectory().getAbsolutePath()
+    );
 
     /**
      * Called when the activity is first created.
@@ -32,35 +33,33 @@ public class FileBrowserActivity extends ListActivity {
                 Constants.ACTIVITY_FILE_MODE, Constants.ACTIVITY_MODE_INVALID);
 
         if (activityMode == Constants.FILE_DECRYPT) {
-            this.setTitle("Choose file to decrypt");
+            setTitle("Choose file to decrypt");
         } else if (activityMode == Constants.FILE_ENCRYPT) {
-            this.setTitle("Choose file to encrypt");
+            setTitle("Choose file to encrypt");
         }
         // setContentView() gets called within the next line,
         // so we do not need it here.
         browseToRoot();
-
-//        ListView listView = getListView();
-//        listView.setTextFilterEnabled(true);
     }
 
     @Override
     public void onBackPressed() {
         // if we're not in the sdcard root, back button will go back to current dir's parent.
-        if (this.currentDirectory.getName().contentEquals(
-                Environment.getExternalStorageDirectory().getName()
-        ))
+        if (!currentDirectory.getName().contentEquals(
+                Environment.getExternalStorageDirectory().getName())
+                && currentDirectory.getParentFile() != null
+        ) {
+            browseTo(currentDirectory.getParentFile());
+        } else {
             super.onBackPressed();
-        else
-            this.browseTo(this.currentDirectory.getParentFile());
+        }
     }
 
     /**
      * This function browses to the root-directory of the file-system.
      */
     private void browseToRoot() {
-        browseTo(new File(Environment.getExternalStorageDirectory()
-                .getAbsolutePath()));
+        browseTo(new File(Environment.getExternalStorageDirectory().getAbsolutePath()));
     }
 
     /**
@@ -68,37 +67,30 @@ public class FileBrowserActivity extends ListActivity {
      * currentDirectory
      */
     private void upOneLevel() {
-        if (this.currentDirectory.getParent() != null)
-            this.browseTo(this.currentDirectory.getParentFile());
+        if (currentDirectory.getParent() != null && currentDirectory.getParentFile() != null) {
+            browseTo(currentDirectory.getParentFile());
+        }
     }
 
     private void browseTo(final File aDirectory) {
         if (aDirectory.isDirectory()) {
-            this.currentDirectory = aDirectory;
+            currentDirectory = aDirectory;
             fill(aDirectory.listFiles());
         }
     }
 
     private void fill(File[] files) {
-        this.directoryEntries.clear();
+        directoryEntries.clear();
 
-        // Add the ".." == 'Up one level'
-//        try {
-//            Thread.sleep(10);
-//        } catch (InterruptedException e1) {
-//            e1.printStackTrace();
-//        }
-
-        if (this.currentDirectory.getParent() != null
-                && !this.currentDirectory.getName().equalsIgnoreCase(
+        if (currentDirectory.getParent() != null
+                && !currentDirectory.getName().equalsIgnoreCase(
                 Environment.getExternalStorageDirectory().getName())) {
             // don't browse upper than /sdcard
-            this.directoryEntries.add("/..");
+            directoryEntries.add("/..");
         }
 
-        // On relative Mode, we have to add the current-path to
-        // the beginning
-        int currentPathStringLength = this.currentDirectory.getAbsolutePath().length();
+        // On relative Mode, we have to add the current-path to the beginning
+        int currentPathStringLength = currentDirectory.getAbsolutePath().length();
         String[] fileList = new String[files.length];
 
         for (int i = 0; i < fileList.length; i++) {
@@ -116,37 +108,37 @@ public class FileBrowserActivity extends ListActivity {
                 return lhs.compareToIgnoreCase(rhs);
             }
         });
-        this.directoryEntries.addAll(new ArrayList<>(Arrays
+        directoryEntries.addAll(new ArrayList<>(Arrays
                 .asList(fileList)));
 
         ArrayAdapter<String> directoryList = new ArrayAdapter<>(this,
-                R.layout.file_row, this.directoryEntries);
+                R.layout.file_row, directoryEntries);
 
-        this.setListAdapter(directoryList);
+        setListAdapter(directoryList);
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        String selectedFileString = this.directoryEntries.get((int) id);
+        String selectedFileString = directoryEntries.get((int) id);
         if (selectedFileString.equals("/..")) {
-            this.upOneLevel();
+            upOneLevel();
         } else {
             File clickedFile = new File(
-                    this.currentDirectory.getAbsolutePath()
-                            + ((!this.directoryEntries.get((int) id)
+                    currentDirectory.getAbsolutePath()
+                            + ((!directoryEntries.get((int) id)
                             .startsWith("/")) ? "/" : "")
-                            + this.directoryEntries.get((int) id)
+                            + directoryEntries.get((int) id)
             );
 
             if (clickedFile.isDirectory()) {
-                this.browseTo(clickedFile);
+                browseTo(clickedFile);
             } else {
                 // a file has been selected
-                Intent intent = this.getIntent();
+                Intent intent = getIntent();
                 intent.putExtra(Constants.FILE_SELECTED,
                         clickedFile.getAbsolutePath());
 
-                this.setResult(RESULT_OK, intent);
+                setResult(RESULT_OK, intent);
                 exitActivity();
             }
         }
@@ -156,6 +148,6 @@ public class FileBrowserActivity extends ListActivity {
      * Exits this activity.
      */
     protected void exitActivity() {
-        this.finish();
+        finish();
     }
 }

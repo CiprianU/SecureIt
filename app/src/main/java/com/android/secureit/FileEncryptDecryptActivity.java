@@ -77,23 +77,21 @@ public class FileEncryptDecryptActivity extends Activity implements OnClickListe
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case Constants.GET_FILE_RETURN_CODE:
-                if (resultCode == RESULT_OK) {
-                    selectedFilePath = data.getStringExtra(Constants.FILE_SELECTED);
+        if (requestCode == Constants.GET_FILE_RETURN_CODE) {
+            if (resultCode == RESULT_OK) {
+                selectedFilePath = data.getStringExtra(Constants.FILE_SELECTED);
 
-                    if (selectedFilePath == null || selectedFilePath.length() == 0) {
-                        finish();
-                    }
-
-                    titleTextView.setText(selectedFilePath);
-
-                    fileContent = FileUtilities.readFile(selectedFilePath);
-                    contentTextView.setText(fileContent);
-                } else {
+                if (selectedFilePath == null || selectedFilePath.length() == 0) {
                     finish();
                 }
-                break;
+
+                titleTextView.setText(selectedFilePath);
+
+                fileContent = FileUtilities.readFile(selectedFilePath);
+                contentTextView.setText(fileContent);
+            } else {
+                finish();
+            }
         }
     }
 

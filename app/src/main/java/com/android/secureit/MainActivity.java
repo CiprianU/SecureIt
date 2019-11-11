@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import com.android.secureit.util.Constants;
 
 import java.util.List;
+import java.util.Objects;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -25,16 +26,20 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        getActionBar().setDisplayHomeAsUpEnabled(false);
+        Objects.requireNonNull(getActionBar()).setDisplayHomeAsUpEnabled(false);
 
         findViewById(R.id.plainTextButton).setOnClickListener(this);
         findViewById(R.id.fileEncryptButton).setOnClickListener(this);
         findViewById(R.id.fileDecryptButton).setOnClickListener(this);
         findViewById(R.id.nfcWriteButton).setOnClickListener(this);
 
-        EasyPermissions.requestPermissions(this, "just accept", 1,
+        EasyPermissions.requestPermissions(
+                this,
+                "just accept",
+                1,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        );
     }
 
     @Override
@@ -45,10 +50,9 @@ public class MainActivity extends Activity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -78,8 +82,7 @@ public class MainActivity extends Activity implements
                 break;
         }
 
-        if (intent != null)
-            this.startActivity(intent);
+        if (intent != null) startActivity(intent);
     }
 
     @Override
